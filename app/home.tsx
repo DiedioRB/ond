@@ -6,10 +6,6 @@ import { Text, View } from "react-native";
 
 export default function Home(){
     return (
-        <ThemedView
-        style={DefaultStyle.container}>
-            <ThemedText>Teste</ThemedText>
-            <Link href='/'><ThemedText>Voltar</ThemedText></Link>
-        </ThemedView>
+        <Text>Teste</Text>
     )
 }

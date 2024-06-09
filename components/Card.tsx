@@ -1,4 +1,4 @@
-import { StyleProp, StyleSheet, Text, View, ViewStyle, useColorScheme } from "react-native"
+import { StyleProp, StyleSheet, Text, TouchableHighlight, View, ViewStyle, useColorScheme } from "react-native"
 import Ionicons from '@expo/vector-icons/Ionicons'
 import DefaultStyle from "@/styles/default";
 import { useThemeColor } from "@/hooks/useThemeColor";
@@ -8,35 +8,42 @@ type CardProps = {
     title: string,
     content?: string,
     icon?: keyof typeof Ionicons.glyphMap,
-    color?: string,
-    textColor?: string,
     style?: any,
+    onPress?: any
 }
 export default function Card(props: CardProps){
-    const color = useThemeColor({ light: props.textColor, dark: props.textColor }, 'text');
-
     return (
-        <View style={[styles.card, DefaultStyle.verticalFlex, props.style]}>
-            <View style={[DefaultStyle.horizontalFlex]}>
-                { props.icon ? <Ionicons name={ props.icon } size={32} color={props.style.color} /> : '' }
-                <Text style={[props.style, styles.text]}>{ props.title }</Text>
+        <TouchableHighlight underlayColor="#DDD" onPress={props.onPress ?? (() => {})} style={[styles.card, DefaultStyle.verticalFlex, props.style]}>
+            <View style={[DefaultStyle.verticalFlex]}>
+                <View style={[DefaultStyle.horizontalFlex, {alignItems: 'center'}]}>
+                    { props.icon ? <Ionicons name={ props.icon } size={32} color={ props.style.color } style={{ marginRight: 5 }} /> : '' }
+                    <Text style={[styles.text, styles.title]} ellipsizeMode="tail" numberOfLines={1}>{ props.title }</Text>
+                </View>
+                <View style={[DefaultStyle.verticalFlex, {flex: 3, justifyContent: 'center'}]}>
+                    <Text style={[styles.text]} ellipsizeMode="tail" numberOfLines={1}>{ props.content }</Text>
+                </View>
             </View>
-            <View style={[DefaultStyle.horizontalFlex, {flex: 3}]}>
-                <Text style={[props.style, styles.text]}>{ props.content }</Text>
-            </View>
-        </View>
+        </TouchableHighlight>
     )
 }
 
 const styles = StyleSheet.create({
     card: {
         padding: 8,
-        borderColor: '#333',
-        borderWidth: 2,
+        borderColor: '#000',
+        borderWidth: 5,
         borderRadius: 10,
-        maxHeight: '20%',
+        margin: 8,
+        shadowColor: '#000',
+        shadowOpacity: 1,
+        shadowRadius: 0,
+        shadowOffset: {width: 10, height: 10}
     },
     text: {
-        fontSize: 20,
+        fontSize: 24,
+        color: '#333',
+    },
+    title: {
+        fontWeight: 'bold'
     }
 })
