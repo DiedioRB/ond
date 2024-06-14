@@ -9,19 +9,27 @@ type CardProps = {
     content?: string,
     icon?: keyof typeof Ionicons.glyphMap,
     style?: any,
-    onPress?: any
+    onPress?: any,
+    titleNumberOfLines?: number,
+    contentNumberOfLines?: number,
 }
 export default function Card(props: CardProps){
     return (
         <TouchableHighlight underlayColor="#DDD" onPress={props.onPress ?? (() => {})} style={[styles.card, DefaultStyle.verticalFlex, props.style]}>
             <View style={[DefaultStyle.verticalFlex]}>
                 <View style={[DefaultStyle.horizontalFlex, {alignItems: 'center'}]}>
-                    { props.icon ? <Ionicons name={ props.icon } size={32} color={ props.style.color } style={{ marginRight: 5 }} /> : '' }
-                    <Text style={[styles.text, styles.title]} ellipsizeMode="tail" numberOfLines={1}>{ props.title }</Text>
+                    { props.icon ? <Ionicons name={ props.icon } size={32} color={ props.style.color } style={{ marginRight: 5 }} /> : undefined }
+                    <Text style={[styles.text, styles.title]} ellipsizeMode="tail" numberOfLines={props.titleNumberOfLines ?? 1}>{ props.title }</Text>
                 </View>
-                <View style={[DefaultStyle.verticalFlex, {flex: 3, justifyContent: 'center'}]}>
-                    <Text style={[styles.text]} ellipsizeMode="tail" numberOfLines={1}>{ props.content }</Text>
-                </View>
+                {props.content
+                    ? (
+                        <View style={[DefaultStyle.verticalFlex, {flex: 3, justifyContent: 'center'}]}>
+                            <Text style={[styles.text]} ellipsizeMode="tail" numberOfLines={props.contentNumberOfLines ?? 1}>{ props.content }</Text>
+                        </View>
+                    )
+                    : undefined
+                }
+                
             </View>
         </TouchableHighlight>
     )

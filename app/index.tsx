@@ -18,6 +18,9 @@ import {
 } from "react-native";
 import RoomList, { ListType } from "@/components/RoomList";
 import Room from "@/models/room";
+import InputModal from "@/components/InputModal.";
+import StylizedButton from "@/components/StylizedButton";
+import Splitter from "@/components/Splitter";
 
 export default function Index() {
     const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +35,7 @@ export default function Index() {
     }
     async function fetchRooms() {
         setIsLoading(true);
-        setRooms(await API.rooms())
+        setRooms((await API.rooms()).filter((room) => !room.hasParent))
         setIsLoading(false);
     }
 
@@ -43,24 +46,20 @@ export default function Index() {
 
     return (
         <View style={[DefaultStyle.container, {rowGap: 10}]}>
-            <Modal
-            transparent={true}
-            visible={searchModalVisible}
-            animationType="fade"
-            onRequestClose={() => {
-                setSearchModalVisible(!searchModalVisible);
-            }}
-            >
-                <View style={[DefaultStyle.flexCenter, DefaultStyle.container, { backgroundColor: '#0003' }]}>
-                    <View style={[DefaultStyle.modal]}>
-                        <Text>Teste</Text>
-                        <Pressable
-                        onPress={() => setSearchModalVisible(!searchModalVisible)}>
-                        <Text>Hide Modal</Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </Modal>
+            <InputModal
+                isVisible={searchModalVisible}
+                onConfirmButtonPressed={(text: any) => {
+                    //TODO: send request to API and search the item
+                    
+                    setSearchModalVisible(false)
+                }}
+                onCloseButtonPressed={() => {
+                    setSearchModalVisible(false)
+                }}
+                title="Onde está..."
+                confirmButtonText="Buscar"
+                cancelButtonText="Fechar"
+            />
             <View style={[DefaultStyle.horizontalFlex, { flex: 1 }]}>
                 <Card
                     title="Buscar"
@@ -77,10 +76,13 @@ export default function Index() {
                 />
             </View>
             <View>
-                <Text style={{ fontSize: 28 }}>Armazenamentos</Text>
-                <RoomList items={rooms} display={ListType.inline} />
-                <Link href="/armazenamentos" style={{ fontSize: 20 }}>Ver todos</Link>
+                <View style={{ flexDirection:'row', alignItems: 'flex-start', gap: 10, padding: 10 }}>
+                    <Text style={{ fontSize: 34 }}>Espaços</Text>
+                    <StylizedButton href="/armazenamentos" title="Ver todos" />
+                </View>
+                <RoomList items={rooms} display={ListType.inline} onItemClick={(room: Room) => { router.push('/armazenamentos/'+room.id) }} />
             </View>
+            <Splitter/>
             <View style={[{ flex: 3, padding: 5, paddingTop: 10 }]}>
                 <Text style={{ fontSize: 28 }}>Atualizados recentemente</Text>
                 { isLoading ? <ActivityIndicator size="large" color={DefaultStyle.loading.color} /> : <ItemList items={recents} /> }

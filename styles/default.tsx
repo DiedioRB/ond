@@ -30,7 +30,18 @@ const DefaultStyle = StyleSheet.create({
         shadowColor: '#000',
         shadowOpacity: 1,
         shadowRadius: 0,
-        shadowOffset: {width: 10, height: 10}
+        shadowOffset: {width: 10, height: 10},
+        padding: 10
+    },
+    fillParent: {
+        width: '100%',
+        height: '100%',
+    },
+    fillWidth: {
+        width: '100%',
+    },
+    fillHeight: {
+        height: '100%',
     },
     separator: {
         height: 1,
@@ -39,10 +50,10 @@ const DefaultStyle = StyleSheet.create({
         alignSelf: 'center'
     },
     loading: {
-        color: '#999'
+        color: '#999',
     },
-    sizeTest: {
-        backgroundColor: '#F00'
+    emptyText: {
+        color: '#555',
     }
 })
 

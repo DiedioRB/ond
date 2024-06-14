@@ -1,15 +1,26 @@
-import { FlatList, StyleProp, StyleSheet, Text, TouchableHighlight, View, ViewStyle, useColorScheme } from "react-native"
+import { FlatList, Pressable, StyleProp, StyleSheet, Text, TouchableHighlight, View, ViewStyle, useColorScheme } from "react-native"
 import Room from "@/models/room";
 import DefaultStyle from "@/styles/default";
 import Card from "./Card";
 
-export enum ListType {inline, default}
+export enum ListType {default, inline, card}
 
 type RoomListProps = {
     items: Room[],
-    display?: ListType
+    display?: ListType,
+    onItemClick?: any
 }
 export default function RoomList(props: RoomListProps){
+
+    function empty(){
+        return (
+            <View style={styles.empty}>
+                <Text style={[DefaultStyle.emptyText, { fontSize: 20 }]}>
+                    Nenhum armazenamento encontrado
+                </Text>
+            </View>
+        )
+    }
     
     function displayDefault(){
         return (
@@ -17,12 +28,33 @@ export default function RoomList(props: RoomListProps){
             style={styles.listDefault}
             ItemSeparatorComponent={() => <View style={ DefaultStyle.separator }></View>}
                 data={props.items}
-                renderItem={(item) => (
-                    <View style={styles.itemDefault}>
-                        <Text style={ styles.title }>{ item.item.name }</Text>
+                renderItem={(item) => {
+                    let content = (
+                        <View style={styles.itemDefault} key={item.item.id}>
+                            <Text style={ styles.title }>{ item.item.name }</Text>
+                        </View>
+                    )
+                    return props.onItemClick
+                        ? (
+                            <Pressable onPress={() => props.onItemClick(item)} key={item.item.id}>
+                                {content}
+                            </Pressable>
+                        )
+                        : content
+                }}
+            />
+        )
+    }
+
+    function displayCard(){
+        return (
+            <View style={styles.listCard}>
+                {props.items.map((room) => 
+                    <View style={[styles.itemCard]}>
+                        <Card title={ room.name } onPress={props.onItemClick ? () => props.onItemClick(room) : () => {}} titleNumberOfLines={2} />
                     </View>
                 )}
-            />
+            </View>
         )
     }
 
@@ -31,11 +63,15 @@ export default function RoomList(props: RoomListProps){
             <View style={styles.listInline}>
                 {props.items.map((room) => 
                     <View style={[styles.itemInline]}>
-                        <Card title={ room.name } />
+                        <Card title={ room.name } onPress={props.onItemClick ? () => props.onItemClick(room) : () => {}} titleNumberOfLines={2} />
                     </View>
                 )}
             </View>
         )
+    }
+
+    if(props.items.length < 1){
+        return empty()
     }
 
     if(props.display == undefined){
@@ -43,11 +79,13 @@ export default function RoomList(props: RoomListProps){
     }
 
     switch(props.display){
-        case ListType.default:
-            return displayDefault()
         case ListType.inline:
-        default:
             return displayInline()
+        case ListType.card:
+            return displayCard()
+        case ListType.default:
+        default:
+            return displayDefault()
     }
 
     return 
@@ -62,14 +100,27 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         overflow: 'scroll'
     },
+    listCard: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
     itemDefault: {
-        padding: 10
+        paddingVertical: 10,
+        paddingHorizontal: 5,
+        borderLeftWidth: 5,
     },
     itemInline:{
-        width: innerWidth*.4,
-        height: innerWidth*.4
+        width: '30%',
+        height: '100%'
+    },
+    itemCard: {
+        width: '50%',
+        minHeight: 150
     },
     title: {
         fontSize: 20,
     },
+    empty: {
+        
+    }
 })

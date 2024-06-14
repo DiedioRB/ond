@@ -4,6 +4,7 @@ export default class Room{
     private _id: number | undefined
     private _name: string = ""
     
+    public hasParent: boolean = false
     private _parent?: Room
     private _parentId?: number
 
@@ -13,6 +14,7 @@ export default class Room{
         this._id = id
         this._name = name
         if(parentId){
+            this.hasParent = true
             this._parentId = parentId
             this.parentLoaded = true
         }
@@ -34,6 +36,14 @@ export default class Room{
     }   
     get name() : string {
         return this._name
+    }
+
+    get parentId() : number | undefined{
+        return this._parentId
+    }
+
+    get parent() : Room | undefined{
+        return this._parent
     }
 
 }
