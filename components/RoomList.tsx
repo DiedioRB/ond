@@ -1,12 +1,13 @@
 import { FlatList, Pressable, StyleProp, StyleSheet, Text, TouchableHighlight, View, ViewStyle, useColorScheme } from "react-native"
-import Room from "@/models/room";
 import DefaultStyle from "@/styles/default";
 import Card from "./Card";
+import Item, { ItemType } from "@/models/item";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export enum ListType {default, inline, card}
 
 type RoomListProps = {
-    items: Room[],
+    items: Item[],
     display?: ListType,
     onItemClick?: any
 }
@@ -30,13 +31,21 @@ export default function RoomList(props: RoomListProps){
                 data={props.items}
                 renderItem={(item) => {
                     let content = (
-                        <View style={styles.itemDefault} key={item.item.id}>
-                            <Text style={ styles.title }>{ item.item.name }</Text>
+                        <View style={[styles.itemDefault, DefaultStyle.horizontalFlex, {alignItems: 'center'}]} key={item.item.id}>
+                            <Ionicons name={ item.item.kind == ItemType.ROOM ? "cube" : "document" } size={32} style={{ marginRight: 5 }} />
+                            <View>
+                                <Text style={ styles.title }>{ item.item.name }</Text>
+                                {
+                                    item.item.parent
+                                    ? <Text style={ styles.subtitle }>Guardado em "{ item.item.parent?.name }"</Text>
+                                    : undefined
+                                }
+                            </View>
                         </View>
                     )
                     return props.onItemClick
                         ? (
-                            <Pressable onPress={() => props.onItemClick(item)} key={item.item.id}>
+                            <Pressable onPress={props.onItemClick ? () => props.onItemClick(item.item) : () => {}} key={item.item.id}>
                                 {content}
                             </Pressable>
                         )
@@ -50,7 +59,7 @@ export default function RoomList(props: RoomListProps){
         return (
             <View style={styles.listCard}>
                 {props.items.map((room) => 
-                    <View style={[styles.itemCard]}>
+                    <View style={[styles.itemCard]} key={room.id}>
                         <Card title={ room.name } onPress={props.onItemClick ? () => props.onItemClick(room) : () => {}} titleNumberOfLines={2} />
                     </View>
                 )}
@@ -62,7 +71,7 @@ export default function RoomList(props: RoomListProps){
         return (
             <View style={styles.listInline}>
                 {props.items.map((room) => 
-                    <View style={[styles.itemInline]}>
+                    <View style={[styles.itemInline]} key={room.id}>
                         <Card title={ room.name } onPress={props.onItemClick ? () => props.onItemClick(room) : () => {}} titleNumberOfLines={2} />
                     </View>
                 )}
@@ -88,7 +97,6 @@ export default function RoomList(props: RoomListProps){
             return displayDefault()
     }
 
-    return 
 }
 
 const styles = StyleSheet.create({
@@ -110,7 +118,7 @@ const styles = StyleSheet.create({
         borderLeftWidth: 5,
     },
     itemInline:{
-        width: '30%',
+        width: '40%',
         height: '100%'
     },
     itemCard: {
@@ -119,6 +127,9 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 20,
+    },
+    subtitle: {
+        fontSize: 14,
     },
     empty: {
         

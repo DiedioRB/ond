@@ -1,43 +1,114 @@
-import Item from "@/models/item";
-import Room from "@/models/room";
+import Item, { ItemType } from "@/models/item";
 import axios from "axios";
 
-const API = {
-    items: async () => {
-        let rooms = await API.rooms()
+const BASE_URL = "http://localhost:8080/"
 
-        return [
-            new Item(1, 'Livro', rooms[0]),
-            new Item(2, 'Caneta', rooms[1]),
-            new Item(3, 'Celular', rooms[2]),
-            new Item(4, 'Violão', rooms[3]),
-            new Item(5, 'Caneca', rooms[0]),
-            new Item(6, 'Carregador', rooms[1]),
-            new Item(7, 'Cabo USB', rooms[2]),
-            new Item(8, 'Caixa de ferramentas', rooms[3]),
-            new Item(9, 'Controle remoto', rooms[0]),
-            new Item(10, 'Chocolate', rooms[1]),
-            new Item(11, 'Microfone', rooms[2]),
-            new Item(12, 'Fósforos', rooms[3]),
-        ]
+const API = {
+    room: async (id: any) : Promise<Item | undefined> => {
+        let room : Item | undefined = undefined
+
+        const endpoint = "items/"+id
+        await axios.get(BASE_URL+endpoint)
+            .then((response) => {
+                let json : Map<string, any>[] = response.data
+                room = Item.fromJson(json)
+            })
+            .catch((reason) => {
+                console.log(reason);
+            })
+        return room
     },
-    item: async (id: any) => {
-        return (await API.items()).filter((item) => item.id == id)
+    items: async (parentId? : any) : Promise<Item[]> => {
+        let items : Item[] = [];
+        const endpoint = parentId ? "items/"+parentId+"/items" : "items"
+        
+        await axios.get(BASE_URL+endpoint)
+            .then((response) => {
+                let json : Map<string, any>[] = response.data
+                for(let item of json){
+                    items.push(Item.fromJson(item))
+                }
+            })
+            .catch((reason) => {
+                console.log(reason);
+            })
+            
+        return items;
     },
-    rooms: async () => {
-        return [
-            new Room(1, 'Quarto'),
-            new Room(2, 'Sala'),
-            new Room(3, 'Cozinha'),
-            new Room(4, 'Quarto de hóspedes'),
-            new Room(5, 'Armário grande', 1),
-            new Room(6, 'Despensa', 3),
-            new Room(7, 'Armário pequeno', 4),
-        ]
+    baseRooms: async () : Promise<Item[]> => {
+        let rooms : Item[] = []
+        const endpoint = "items/rooms/bases"
+        await axios.get(BASE_URL+endpoint)
+            .then((response) => {
+                let json : Map<string, any>[] = response.data
+                
+                for(let item of json){
+                    rooms.push(Item.fromJson(item))
+                }
+            })
+            .catch((reason) => {
+                console.log(reason);
+            })
+        
+        return rooms
     },
-    room: async (id: any) => {
-        return (await API.rooms()).filter((room) => room.id == id)
+    rooms: async () : Promise<Item[]> => {
+        let rooms : Item[] = []
+        const endpoint = "items/rooms"
+        await axios.get(BASE_URL+endpoint)
+            .then((response) => {
+                let json : Map<string, any>[] = response.data
+                
+                for(let item of json){
+                    rooms.push(Item.fromJson(item))
+                }
+            })
+            .catch((reason) => {
+                console.log(reason);
+            })
+        
+        return rooms
     },
+    searchItem: async (term : any) : Promise<Item[]> => {
+        let rooms : Item[] = []
+        const endpoint = "items/search/"+term
+        await axios.get(BASE_URL+endpoint)
+            .then((response) => {
+                let json : Map<string, any>[] = response.data
+                
+                for(let item of json){
+                    rooms.push(Item.fromJson(item))
+                }
+            })
+            .catch((reason) => {
+                console.log(reason);
+            })
+
+        return rooms
+    },
+    saveItem: async (item :Item) : Promise<boolean> => {
+        let success : boolean = false
+        const endpoint = "items"
+        await axios.post(BASE_URL+endpoint, 
+            JSON.stringify(item.toJson),
+            {
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            }
+        )
+        .then((response) => {
+            if(response.status == 200){
+                success = true
+            }
+            success = false
+        })
+        .catch((reason) => {
+            console.log(reason);
+        })
+
+        return success
+    }
 }
 
 export default API;

@@ -16,22 +16,21 @@ import {
     Text,
     View,
 } from "react-native";
-import Room from "@/models/room";
 import RoomList, { ListType } from "@/components/RoomList";
 
 type ArmazenamentosProps = {
-    parent?: Room
+    parent?: Item
 }
 
 export default function Armazenamentos(props: ArmazenamentosProps) {
     const navigation = useNavigation()
 
     const [isLoading, setIsLoading] = useState(false);
-    const [rooms, setRooms] = useState<Room[]>([]);
+    const [rooms, setRooms] = useState<Item[]>([]);
 
     async function fetchRooms() {
         setIsLoading(true);
-        setRooms((await API.rooms()).filter((room) => !room.hasParent));
+        setRooms(await API.baseRooms());
         setIsLoading(false);
     }
 
@@ -39,8 +38,9 @@ export default function Armazenamentos(props: ArmazenamentosProps) {
         fetchRooms();
     }, []);
 
-    //FIXME: corrigir na Stack
-    navigation.setOptions({headerTitle: 'Espaços'})
+    useEffect(() => {
+        navigation.setOptions({headerTitle: 'Espaços'})
+    }, []);
 
     return (
         <View style={[DefaultStyle.container]}>
@@ -50,7 +50,7 @@ export default function Armazenamentos(props: ArmazenamentosProps) {
                     ? <ActivityIndicator size="large" color={DefaultStyle.loading.color} />
                     : (
                     <RoomList items={rooms} display={ListType.card}
-                        onItemClick={(room: Room) => {router.push('/armazenamentos/'+room.id)}} />
+                        onItemClick={(room: Item) => {router.push('/armazenamentos/'+room.id)}} />
                     )
                 }
             </View>

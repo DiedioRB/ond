@@ -26,7 +26,7 @@ const DefaultStyle = StyleSheet.create({
         borderRadius: 10,
         minHeight: '20%',
         maxHeight: '80%',
-        width: '80%',
+        width: '90%',
         shadowColor: '#000',
         shadowOpacity: 1,
         shadowRadius: 0,

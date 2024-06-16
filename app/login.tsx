@@ -118,16 +118,5 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-    searchCard: {
-        // backgroundColor: "#12054D",
-        // color: "#DDD",
-    },
-    createCard: {
-        // backgroundColor: "#871D27",
-        // color: "#DDD",
-    },
-    roomsCard: {
-        // backgroundColor: "#871D27",
-        // color: "#DDD",
-    },
+    
 });
