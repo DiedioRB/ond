@@ -1,13 +1,77 @@
+import StorageHelper from "@/helpers/storage_helper";
 import Item, { ItemType } from "@/models/item";
+import User from "@/models/user";
 import axios from "axios";
 
 const BASE_URL = "http://localhost:8080/"
 
 const API = {
+    userPath: async() : Promise<string> => {
+        let user :User | null = await StorageHelper.getUser()
+        if(user != null){
+            return "users/"+user.id+"/"
+        }
+        return ""
+    },
+    login: async (email :string, password :string) : Promise<User | undefined> => {
+        let found :User | undefined
+        const endpoint = "users/login"
+        await axios.post(BASE_URL+endpoint, 
+            JSON.stringify({
+                email: email,
+                password: password,
+            }),
+            {
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            }
+        )
+        .then((response) => {
+            if(response.status == 200){
+                found = User.fromJson(response.data)
+            }else{
+                found = undefined
+            }
+        })
+        .catch((reason) => {
+            console.log(reason);
+        })
+
+        return found
+    },
+    register: async (name:string, email :string, password :string) : Promise<User | undefined> => {
+        let found :User | undefined
+        const endpoint = "users/register"
+        await axios.post(BASE_URL+endpoint, 
+            JSON.stringify({
+                name: name,
+                email: email,
+                password: password,
+            }),
+            {
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            }
+        )
+        .then((response) => {
+            if(response.status == 200){
+                found = User.fromJson(response.data)
+            }else{
+                found = undefined
+            }
+        })
+        .catch((reason) => {
+            console.log(reason);
+        })
+
+        return found
+    },
     room: async (id: any) : Promise<Item | undefined> => {
         let room : Item | undefined = undefined
 
-        const endpoint = "items/"+id
+        const endpoint = (await API.userPath())+"items/"+id
         await axios.get(BASE_URL+endpoint)
             .then((response) => {
                 let json : Map<string, any>[] = response.data
@@ -20,7 +84,7 @@ const API = {
     },
     items: async (parentId? : any) : Promise<Item[]> => {
         let items : Item[] = [];
-        const endpoint = parentId ? "items/"+parentId+"/items" : "items"
+        const endpoint = parentId ? (await API.userPath())+"items/"+parentId+"/items" : (await API.userPath())+"items"
         
         await axios.get(BASE_URL+endpoint)
             .then((response) => {
@@ -37,7 +101,7 @@ const API = {
     },
     baseRooms: async () : Promise<Item[]> => {
         let rooms : Item[] = []
-        const endpoint = "items/rooms/bases"
+        const endpoint = (await API.userPath())+"items/rooms/bases"
         await axios.get(BASE_URL+endpoint)
             .then((response) => {
                 let json : Map<string, any>[] = response.data
@@ -54,7 +118,7 @@ const API = {
     },
     rooms: async () : Promise<Item[]> => {
         let rooms : Item[] = []
-        const endpoint = "items/rooms"
+        const endpoint = (await API.userPath())+"items/rooms"
         await axios.get(BASE_URL+endpoint)
             .then((response) => {
                 let json : Map<string, any>[] = response.data
@@ -71,7 +135,7 @@ const API = {
     },
     searchItem: async (term : any) : Promise<Item[]> => {
         let rooms : Item[] = []
-        const endpoint = "items/search/"+term
+        const endpoint = (await API.userPath())+"items/search/"+term
         await axios.get(BASE_URL+endpoint)
             .then((response) => {
                 let json : Map<string, any>[] = response.data
@@ -88,7 +152,7 @@ const API = {
     },
     saveItem: async (item :Item) : Promise<boolean> => {
         let success : boolean = false
-        const endpoint = "items"
+        const endpoint = (await API.userPath())+"items"
         await axios.post(BASE_URL+endpoint, 
             JSON.stringify(item.toJson),
             {
@@ -108,7 +172,30 @@ const API = {
         })
 
         return success
-    }
+    },
+    deleteItem: async (item :Item) : Promise<boolean> => {
+        let success : boolean = false
+        const endpoint = (await API.userPath())+"items/"+item.id
+        await axios.delete(BASE_URL+endpoint, 
+            {
+                data: JSON.stringify(item.toJson),
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            }
+        )
+        .then((response) => {
+            if(response.status == 200){
+                success = true
+            }
+            success = false
+        })
+        .catch((reason) => {
+            console.log(reason);
+        })
+
+        return success
+    },
 }
 
 export default API;

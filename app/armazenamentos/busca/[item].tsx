@@ -4,7 +4,7 @@ import Item, { ItemType } from "@/models/item";
 import API from "@/services/api";
 import DefaultStyle from "@/styles/default";
 import { useEffect, useState } from "react";
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import { router, useFocusEffect, useLocalSearchParams, useNavigation } from 'expo-router'
 import {
     ActivityIndicator,
     Alert,
@@ -19,6 +19,7 @@ import {
 import RoomList, { ListType } from "@/components/RoomList";
 import Splitter from "@/components/Splitter";
 import { useRouteInfo, useRouter } from "expo-router/build/hooks";
+import { useIsFocused } from "@react-navigation/native";
 
 type ArmazenamentosProps = {
     
@@ -27,13 +28,14 @@ type ArmazenamentosProps = {
 export default function busca(props: ArmazenamentosProps) {
     const navigation = useNavigation()
     const { item } = useLocalSearchParams()
-    console.log(item);
     
     const [currentRoom, setCurrentRoom] = useState<Item>();
 
     const [isLoading, setIsLoading] = useState(false);
     const [items, setItems] = useState<Item[]>([]);
     const [rooms, setRooms] = useState<Item[]>([]);
+
+    const isFocused = useIsFocused()
 
     async function fetchResults(){
         setIsLoading(true);
@@ -44,7 +46,7 @@ export default function busca(props: ArmazenamentosProps) {
 
     useEffect(() => {
         fetchResults()
-    }, []);
+    }, [isFocused]);
 
     useEffect(() => {
         navigation.setOptions({headerTitle: 'Busca por "'+item+'"'})
@@ -53,7 +55,7 @@ export default function busca(props: ArmazenamentosProps) {
     return (
         <View style={[DefaultStyle.container]}>
             <View style={[{ flex: 3, padding: 5, paddingTop: 10 }]}>
-                <Text style={{ fontSize: 28 }}>Resultados da busca por: "{ item }"</Text>
+                <Text style={{ fontSize: 28 }}>Achei "{ item }" em:</Text>
                 { isLoading
                     ? <ActivityIndicator size="large" color={DefaultStyle.loading.color} />
                     : (
@@ -63,7 +65,11 @@ export default function busca(props: ArmazenamentosProps) {
                                 items.length > 0
                                 ?
                                 <RoomList items={items} display={ListType.default}
-                                    onItemClick={(room: Item) => {router.push('/armazenamentos/'+room.parent?.id)}} />
+                                    onItemClick={(room: Item) => {router.push('armazenamentos/'+room.parent?.id)}} 
+                                    onItemChanged={async () => {
+                                        await fetchResults()
+                                    }}
+                                    />
                                 : <Text style={{ fontSize: 16 }}>Nenhum resultado encontrado</Text>
                             }
                             </View>

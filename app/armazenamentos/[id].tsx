@@ -19,6 +19,7 @@ import {
 import RoomList, { ListType } from "@/components/RoomList";
 import Splitter from "@/components/Splitter";
 import { useRouteInfo, useRouter } from "expo-router/build/hooks";
+import { useIsFocused } from "@react-navigation/native";
 
 type ArmazenamentosProps = {
     parent?: Item
@@ -32,6 +33,8 @@ export default function ArmazenamentoById(props: ArmazenamentosProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [items, setItems] = useState<Item[]>([]);
     const [rooms, setRooms] = useState<Item[]>([]);
+
+    const isFocused = useIsFocused()
 
     async function fetchCurrent(){
         setIsLoading(true);
@@ -47,7 +50,7 @@ export default function ArmazenamentoById(props: ArmazenamentosProps) {
 
     useEffect(() => {
         fetchCurrent()
-    }, []);
+    }, [isFocused]);
 
     useEffect(() => {
         navigation.setOptions({headerTitle: currentRoom?.name})

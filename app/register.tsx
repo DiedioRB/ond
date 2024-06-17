@@ -29,26 +29,23 @@ import { useIsFocused } from "@react-navigation/native";
 export default function Index() {
     const navigation = useNavigation()
     const [isLoading, setIsLoading] = useState(false)
+    const [nameText, setNameText] = useState("")
     const [emailText, setEmailText] = useState("")
     const [passwordText, setPasswordText] = useState("")
 
     const isFocused = useIsFocused()
 
-    async function login(){
+    async function register(){
         setIsLoading(true)
-        let found :User | undefined = await API.login(emailText, passwordText)
-        if(found != undefined){
-            await StorageHelper.setUser(found)
+        let registered :User | undefined = await API.register(nameText, emailText, passwordText)
+        if(registered != undefined){
+            await StorageHelper.setUser(registered)
             router.replace('/')
         }else{
             console.log("Usuário não encontrado");
             
         }
         setIsLoading(false)
-    }
-
-    function register(){
-        router.push('/register')
     }
 
     async function getLogin() {
@@ -72,22 +69,24 @@ export default function Index() {
                 <Text style={styles.title}>Ond?</Text>
                 <View style={[DefaultStyle.fillWidth, {padding: 20, gap: 20}]}>
                     <View style={[DefaultStyle.flexCenter, DefaultStyle.fillParent, {flex: 3, alignItems: 'flex-start', gap: 3}]}>
+                        <Text style={[{fontSize: 20, fontWeight: 'bold'}]}>Nome</Text>
+                        <TextInput onChangeText={(text) => { setNameText(text) }} value={nameText} keyboardType="default" textContentType="name" style={[DefaultStyle.fillWidth, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
                         <Text style={[{fontSize: 20, fontWeight: 'bold'}]}>E-mail</Text>
-                        <TextInput onChangeText={(text) => { setEmailText(text) }} value={emailText} keyboardType="email-address" textContentType="emailAddress"  style={[DefaultStyle.fillWidth, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
+                        <TextInput onChangeText={(text) => { setEmailText(text) }} value={emailText} keyboardType="email-address" textContentType="emailAddress" style={[DefaultStyle.fillWidth, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
                         <Text style={[{fontSize: 20, fontWeight: 'bold'}]}>Senha</Text>
                         <TextInput onChangeText={(text) => { setPasswordText(text) }} secureTextEntry={true} value={passwordText} style={[DefaultStyle.fillWidth, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
                     </View>
                     <View style={[DefaultStyle.horizontalFlex, {flex: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 20}]}>
                         <StylizedButton
                             onPress={() => {
-                                register()
+                                router.back()
                             }}
-                            title={"Cadastro"} />
+                            title={"Voltar"} />
                         <StylizedButton
                             onPress={() => {
-                                login()
+                                register()
                             }}
-                            title={"Login"} />
+                            title={"Cadastrar"} />
                     </View>
                 </View>
             </View>

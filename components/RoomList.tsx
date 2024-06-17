@@ -3,15 +3,33 @@ import DefaultStyle from "@/styles/default";
 import Card from "./Card";
 import Item, { ItemType } from "@/models/item";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useState } from "react";
+import SaveModal from "./SaveModal";
+import API from "@/services/api";
+import ConfirmModal from "./ConfirmModal";
 
 export enum ListType {default, inline, card}
 
 type RoomListProps = {
     items: Item[],
     display?: ListType,
-    onItemClick?: any
+    onItemClick?: any,
+    onItemChanged?: any,
 }
 export default function RoomList(props: RoomListProps){
+    const [editModalVisible, setEditModalVisible] = useState(false)
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false)
+    const [selectedItem, setSelectedItem] = useState<Item | undefined>(undefined)
+
+    async function saveItem(item: Item){
+        await API.saveItem(item)
+        props.onItemChanged()
+    }
+
+    async function deleteItem(item :Item){
+        await API.deleteItem(item)
+        props.onItemChanged()
+    }
 
     function empty(){
         return (
@@ -25,33 +43,79 @@ export default function RoomList(props: RoomListProps){
     
     function displayDefault(){
         return (
-            <FlatList
-            style={styles.listDefault}
-            ItemSeparatorComponent={() => <View style={ DefaultStyle.separator }></View>}
-                data={props.items}
-                renderItem={(item) => {
-                    let content = (
-                        <View style={[styles.itemDefault, DefaultStyle.horizontalFlex, {alignItems: 'center'}]} key={item.item.id}>
-                            <Ionicons name={ item.item.kind == ItemType.ROOM ? "cube" : "document" } size={32} style={{ marginRight: 5 }} />
-                            <View>
-                                <Text style={ styles.title }>{ item.item.name }</Text>
-                                {
-                                    item.item.parent
-                                    ? <Text style={ styles.subtitle }>Guardado em "{ item.item.parent?.name }"</Text>
-                                    : undefined
-                                }
+            <View>
+                <SaveModal
+                    isVisible={editModalVisible}
+                    title="Editar"
+                    onCloseButtonPressed={() => {
+                        setEditModalVisible(false)
+                    }}
+                    onConfirmButtonPressed={async (name: string, room: Item, kind: ItemType, original :Item) => {
+                        original.name = name
+                        original.parent = room
+                        original.kind = kind
+
+                        await saveItem(original)
+
+                    }}
+                    item={selectedItem}
+                />
+                <ConfirmModal
+                    title="Quer mesmo excluir o item e tudo dentro dele?"
+                    isVisible={deleteModalVisible}
+                    onCloseButtonPressed={() => {
+                        setDeleteModalVisible(false)
+                    }}
+                    onConfirmButtonPressed={(item :Item) => {
+                        deleteItem(item)
+                        setDeleteModalVisible(false)
+                    }}
+                    item={selectedItem}
+                />
+                <FlatList
+                style={styles.listDefault}
+                ItemSeparatorComponent={() => <View style={ DefaultStyle.separator }></View>}
+                    data={props.items}
+                    renderItem={(item) => {
+                        let content = (
+                            <View style={[styles.itemDefault, DefaultStyle.horizontalFlex, {alignItems: 'center', justifyContent: "space-between"}]} key={item.item.id}>
+                                <View style={DefaultStyle.horizontalFlex}>
+                                    <Ionicons name={ item.item.kind == ItemType.ROOM ? "cube" : "document" } size={32} style={{ marginRight: 5 }} />
+                                    <View>
+                                        <Text style={ styles.title }>{ item.item.name }</Text>
+                                        {
+                                            item.item.parent
+                                            ? <Text style={ styles.subtitle }>Guardado em "{ item.item.parent?.name }"</Text>
+                                            : undefined
+                                        }
+                                    </View>
+                                </View>
+                                <View style={ [DefaultStyle.horizontalFlex, {justifyContent: 'flex-end'}] }>
+                                <Pressable onPress={() => {
+                                    setSelectedItem(item.item)
+                                    setDeleteModalVisible(true)
+                                }}>
+                                    <Ionicons name="trash" size={32} />
+                                </Pressable>
+                                <Pressable onPress={() => {
+                                    setSelectedItem(item.item)
+                                    setEditModalVisible(true)
+                                }}>
+                                    <Ionicons name="information-circle" size={32} />
+                                </Pressable>
+                                </View>
                             </View>
-                        </View>
-                    )
-                    return props.onItemClick
-                        ? (
-                            <Pressable onPress={props.onItemClick ? () => props.onItemClick(item.item) : () => {}} key={item.item.id}>
-                                {content}
-                            </Pressable>
                         )
-                        : content
-                }}
-            />
+                        return props.onItemClick
+                            ? (
+                                <Pressable onPress={props.onItemClick ? () => props.onItemClick(item.item) : () => {}} key={item.item.id}>
+                                    {content}
+                                </Pressable>
+                            )
+                            : content
+                    }}
+                />
+            </View>
         )
     }
 

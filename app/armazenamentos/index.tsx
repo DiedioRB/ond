@@ -17,6 +17,7 @@ import {
     View,
 } from "react-native";
 import RoomList, { ListType } from "@/components/RoomList";
+import { useIsFocused } from "@react-navigation/native";
 
 type ArmazenamentosProps = {
     parent?: Item
@@ -28,6 +29,8 @@ export default function Armazenamentos(props: ArmazenamentosProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [rooms, setRooms] = useState<Item[]>([]);
 
+    const isFocused = useIsFocused()
+
     async function fetchRooms() {
         setIsLoading(true);
         setRooms(await API.baseRooms());
@@ -36,7 +39,7 @@ export default function Armazenamentos(props: ArmazenamentosProps) {
 
     useEffect(() => {
         fetchRooms();
-    }, []);
+    }, [isFocused]);
 
     useEffect(() => {
         navigation.setOptions({headerTitle: 'Espaços'})
@@ -50,7 +53,7 @@ export default function Armazenamentos(props: ArmazenamentosProps) {
                     ? <ActivityIndicator size="large" color={DefaultStyle.loading.color} />
                     : (
                     <RoomList items={rooms} display={ListType.card}
-                        onItemClick={(room: Item) => {router.push('/armazenamentos/'+room.id)}} />
+                        onItemClick={(room: Item) => {router.push('armazenamentos/'+room.id)}} />
                     )
                 }
             </View>

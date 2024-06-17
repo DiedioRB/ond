@@ -19,7 +19,8 @@ export default class Item{
 
     get id() : number | undefined | null {
         return this._id
-    }   
+    }
+
     get name() : string {
         return this._name
     }
@@ -36,11 +37,27 @@ export default class Item{
         return this._items
     }
 
+    set name(name: string){
+        this._name = name
+    }
+    set parent(parent: Item){
+        this._parent = parent
+    }
+    set kind(kind: ItemType){
+        this._kind = kind
+    }
+
     get toJson() : Map<String, any> {
+        console.log(this.parent?.toJson);
+        let parentJson = null
+        if(this.parent?.toJson && this.parent?.id != undefined){
+            parentJson = this.parent.toJson
+        }
+        
         let json : any = {
             id: this.id,
             name: this.name,
-            parent: this.parent?.toJson,
+            parent: parentJson,
             kind: this.kind,
         }
         return json

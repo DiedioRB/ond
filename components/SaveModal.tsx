@@ -11,7 +11,7 @@ type SaveModalProps = {
     isVisible: boolean,
     onCloseButtonPressed: any,
     onConfirmButtonPressed: any,
-
+    item?: Item,
 }
 
 export default function SaveModal(props: SaveModalProps){
@@ -26,12 +26,17 @@ export default function SaveModal(props: SaveModalProps){
         setIsLoading(false)
     }
 
-    useEffect(() => {
+    function onOpen(){
         fetchRooms()
-    }, [])
+        
+        setSelectedRoom(props.item?.parent ?? null)
+        if(props.item){
+            setInputText(props.item.name)
+        }
+    }
 
     useEffect(() => {
-        setSelectedRoom(null)
+        fetchRooms()
     }, [])
 
     return (
@@ -40,6 +45,7 @@ export default function SaveModal(props: SaveModalProps){
         visible={props.isVisible}
         animationType="fade"
         onRequestClose={() => props.onCloseButtonPressed()}
+        onShow={onOpen}
         >
             <View style={[DefaultStyle.flexCenter, DefaultStyle.container, { backgroundColor: '#0003' }]}>
                 <View style={[DefaultStyle.modal]}>
@@ -47,7 +53,7 @@ export default function SaveModal(props: SaveModalProps){
                         <View style={[DefaultStyle.flexCenter, DefaultStyle.fillParent, {flex: 3, alignItems: 'flex-start', gap: 3}]}>
                             <Text style={[{fontSize: 20, fontWeight: 'bold'}]}>Onde?</Text>
                             <SelectDropdown
-                                defaultValue={null}
+                                defaultValue={rooms.find((item) => item.id == props.item?.parent?.id) ?? null}
                                 search
                                 searchPlaceHolder="Procurar"
                                 searchInputTxtStyle={{ padding: 5 }}
@@ -83,14 +89,14 @@ export default function SaveModal(props: SaveModalProps){
                                 title={"Cancelar"} />
                             <StylizedButton
                                 onPress={() => {
-                                    props.onConfirmButtonPressed(inputText, selectedRoom, ItemType.ITEM)
+                                    props.onConfirmButtonPressed(inputText, selectedRoom, ItemType.ITEM, props.item)
                                     setInputText("")
                                     setSelectedRoom(null)
                                 }}
                                 title={"+ Item"} />
                             <StylizedButton
                                 onPress={() => {
-                                    props.onConfirmButtonPressed(inputText, selectedRoom, ItemType.ROOM)
+                                    props.onConfirmButtonPressed(inputText, selectedRoom, ItemType.ROOM, props.item)
                                     setInputText("")
                                     setSelectedRoom(null)
                                 }}
