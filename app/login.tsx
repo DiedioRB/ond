@@ -80,8 +80,8 @@ export default function Index() {
             />
             <View style={[DefaultStyle.fillParent, DefaultStyle.flexCenter, {gap: 20}]}>
                 <Text style={styles.title}>Ond?</Text>
-                <View style={[DefaultStyle.fillWidth, {padding: 20, gap: 20}]}>
-                    <View style={[DefaultStyle.flexCenter, DefaultStyle.fillParent, {flex: 3, alignItems: 'flex-start', gap: 3}]}>
+                <View style={[DefaultStyle.fillWidth, {padding: 20, gap: 20, height: '50%', justifyContent: 'center'}]}>
+                    <View style={[DefaultStyle.flexCenter, DefaultStyle.fillParent, {flex: 1, alignItems: 'flex-start', gap: 3}]}>
                         <Text style={[DefaultStyle.onBackground, {fontSize: 20, fontWeight: 'bold'}]}>E-mail</Text>
                         <TextInput onChangeText={(text) => { setEmailText(text) }} value={emailText} keyboardType="email-address" textContentType="emailAddress"  style={[DefaultStyle.fillWidth, DefaultStyle.onBackground, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
                         <Text style={[DefaultStyle.onBackground, {fontSize: 20, fontWeight: 'bold'}]}>Senha</Text>

@@ -110,29 +110,33 @@ export default function Index() {
                     onPress={() => setNewModalVisible(true)}
                 />
             </View>
-            <View>
+            <View style={{ flex: 1 }}>
                 <View style={{ flexDirection:'row', alignItems: 'flex-start', gap: 10, padding: 10 }}>
                     <Text style={[DefaultStyle.onBackground, { fontSize: 34 }]}>Salas</Text>
                     <StylizedButton href="armazenamentos" title="Ver todas" />
                 </View>
-                <RoomList items={rooms} display={ListType.inline} onItemClick={(room: Item) => { router.push('armazenamentos/'+room.id) }} />
+                <View style={{ flex: 1}}>
+                    <RoomList items={rooms} display={ListType.inline} onItemClick={(room: Item) => { router.push('armazenamentos/'+room.id) }} />
+                </View>
             </View>
             <Splitter/>
             <View style={[{ flex: 3, padding: 5, paddingTop: 10, overflow:'scroll' }]}>
                 <Text style={[DefaultStyle.onBackground, { fontSize: 28 }]}>Adicionados recentemente</Text>
                 { isLoading
                     ? <ActivityIndicator size="large" color={DefaultStyle.loading.color} />
-                    : <RoomList items={recents} display={ListType.default} onItemClick={
-                            (room: Item) => {
-                                let id = room.kind == ItemType.ROOM ? room.id : room.parent!.id
-                                router.push('armazenamentos/'+id)
+                    : <View style={{ flex: 1 }}>
+                        <RoomList items={recents} display={ListType.default} onItemClick={
+                                (room: Item) => {
+                                    let id = room.kind == ItemType.ROOM ? room.id : room.parent!.id
+                                    router.push('armazenamentos/'+id)
+                                }
                             }
-                        }
-                        onItemChanged={async () => {
-                            await fetchRooms()
-                            await fetchRecents()
-                        }}
-                    />
+                            onItemChanged={async () => {
+                                await fetchRooms()
+                                await fetchRecents()
+                            }}
+                        />
+                    </View>
                 }
             </View>
         </View>

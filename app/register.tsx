@@ -66,7 +66,7 @@ export default function Index() {
     })
 
     return (
-        <View style={[DefaultStyle.container, DefaultStyle.flexCenter]}>
+        <View style={[DefaultStyle.container, DefaultStyle.flexCenter, DefaultStyle.background]}>
             <MessageModal
                 isVisible={errorModalVisible}
                 message={modalMessage}
@@ -76,15 +76,15 @@ export default function Index() {
                 confirmButtonText="OK"
             />
             <View style={[DefaultStyle.fillParent, DefaultStyle.flexCenter, {gap: 20}]}>
-                <Text style={styles.title}>Ond?</Text>
-                <View style={[DefaultStyle.fillWidth, {padding: 20, gap: 20}]}>
+                <Text style={[DefaultStyle.onBackground, styles.title]}>Ond?</Text>
+                <View style={[DefaultStyle.fillWidth, {padding: 20, gap: 20, height: '70%'}]}>
                     <View style={[DefaultStyle.flexCenter, DefaultStyle.fillParent, {flex: 3, alignItems: 'flex-start', gap: 3}]}>
-                        <Text style={[{fontSize: 20, fontWeight: 'bold'}]}>Nome</Text>
-                        <TextInput onChangeText={(text) => { setNameText(text) }} value={nameText} keyboardType="default" textContentType="name" style={[DefaultStyle.fillWidth, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
-                        <Text style={[{fontSize: 20, fontWeight: 'bold'}]}>E-mail</Text>
-                        <TextInput onChangeText={(text) => { setEmailText(text) }} value={emailText} keyboardType="email-address" textContentType="emailAddress" style={[DefaultStyle.fillWidth, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
-                        <Text style={[{fontSize: 20, fontWeight: 'bold'}]}>Senha</Text>
-                        <TextInput onChangeText={(text) => { setPasswordText(text) }} secureTextEntry={true} value={passwordText} style={[DefaultStyle.fillWidth, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
+                        <Text style={[DefaultStyle.onBackground, {fontSize: 20, fontWeight: 'bold'}]}>Nome</Text>
+                        <TextInput onChangeText={(text) => { setNameText(text) }} value={nameText} keyboardType="default" textContentType="name" style={[DefaultStyle.fillWidth, DefaultStyle.onBackground, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
+                        <Text style={[DefaultStyle.onBackground, {fontSize: 20, fontWeight: 'bold'}]}>E-mail</Text>
+                        <TextInput onChangeText={(text) => { setEmailText(text) }} value={emailText} keyboardType="email-address" textContentType="emailAddress" style={[DefaultStyle.fillWidth, DefaultStyle.onBackground, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
+                        <Text style={[DefaultStyle.onBackground, {fontSize: 20, fontWeight: 'bold'}]}>Senha</Text>
+                        <TextInput onChangeText={(text) => { setPasswordText(text) }} secureTextEntry={true} value={passwordText} style={[DefaultStyle.fillWidth, DefaultStyle.onBackground, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
                     </View>
                     <View style={[DefaultStyle.horizontalFlex, {flex: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 20}]}>
                         <StylizedButton

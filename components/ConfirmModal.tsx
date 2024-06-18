@@ -38,7 +38,8 @@ export default function ConfirmModal(props: ConfirmModalProps){
                                 onPress={() => {
                                     props.onConfirmButtonPressed(props.item)
                                 }}
-                                title={props.confirmButtonText ?? "Confirmar"} />
+                                title={props.confirmButtonText ?? "Confirmar"} 
+                                style={DefaultStyle.danger}/>
                         </View>
                     </View>
                 </View>

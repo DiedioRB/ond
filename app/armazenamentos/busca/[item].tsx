@@ -55,7 +55,7 @@ export default function busca(props: ArmazenamentosProps) {
     return (
         <View style={[DefaultStyle.container, DefaultStyle.background]}>
             <View style={[{ flex: 3, padding: 5, paddingTop: 10 }]}>
-                <Text style={{ fontSize: 28 }}>Achei "{ item }" em:</Text>
+                <Text style={[DefaultStyle.onBackground, { fontSize: 28 }]}>Achei "{ item }" em:</Text>
                 { isLoading
                     ? <ActivityIndicator size="large" color={DefaultStyle.loading.color} />
                     : (
@@ -65,7 +65,7 @@ export default function busca(props: ArmazenamentosProps) {
                                 items.length > 0
                                 ?
                                 <RoomList items={items} display={ListType.default}
-                                    onItemClick={(room: Item) => {router.push('armazenamentos/'+room.parent?.id)}} 
+                                    onItemClick={(room: Item) => {router.push('armazenamentos/'+(room.parent?.id ?? room.id))}} 
                                     onItemChanged={async () => {
                                         await fetchResults()
                                     }}

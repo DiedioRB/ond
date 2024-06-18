@@ -38,7 +38,7 @@ export default function ArmazenamentoById(props: ArmazenamentosProps) {
 
     async function fetchCurrent(){
         setIsLoading(true);
-        let room : Item | undefined = await API.room(id)
+        let room : Item | undefined = await API.room(id ?? null)
         
         room!.items.push(...(await API.items(room!.id)))
         setCurrentRoom(room)
@@ -63,7 +63,7 @@ export default function ArmazenamentoById(props: ArmazenamentosProps) {
                     ? <ActivityIndicator size="large" color={DefaultStyle.loading.color} />
                     : (
                         <View style={[DefaultStyle.verticalFlex, { gap: 5 }]}>
-                            <View>
+                            <View style={{ height: '20%' }}>
                             <Text style={[DefaultStyle.onBackground, { fontSize: 20 }]}>Armazenamentos aqui:</Text>
                             {
                                 rooms.length > 0

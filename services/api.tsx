@@ -3,7 +3,7 @@ import Item, { ItemType } from "@/models/item";
 import User from "@/models/user";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/"
+const BASE_URL = "http://192.168.15.187:8080/"
 
 const API = {
     userPath: async() : Promise<string> => {
@@ -28,6 +28,8 @@ const API = {
             }
         )
         .then((response) => {
+            console.log(response);
+            
             if(response.status == 200){
                 found = User.fromJson(response.data)
             }else{

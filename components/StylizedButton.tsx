@@ -14,7 +14,7 @@ export default function StylizedButton(props: StylizedButtonProps){
             <TouchableHighlight
             underlayColor={'#0003'}
             onPress={() => {}}>
-                <Link href={props.href ?? "" } style={styles.button}>{props.title}</Link>
+                <Link href={props.href ?? "" } style={[styles.button, {color: props.style?.color}]}>{props.title}</Link>
             </TouchableHighlight>
         )
     }
@@ -22,7 +22,7 @@ export default function StylizedButton(props: StylizedButtonProps){
         <TouchableHighlight
         underlayColor={'#0003'}
         onPress={() => props.onPress()}>
-            <Text style={styles.button}>{props.title}</Text>
+            <Text style={[styles.button, {color: props.style?.color}]}>{props.title}</Text>
         </TouchableHighlight>
     )
 }
@@ -39,5 +39,6 @@ const styles = StyleSheet.create({
         shadowRadius: 0,
         shadowOffset: {width: 5, height: 2},
         backgroundColor: '#EEE',
+        textAlign: 'center'
     }
 })

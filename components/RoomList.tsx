@@ -1,4 +1,4 @@
-import { FlatList, Pressable, StyleProp, StyleSheet, Text, TouchableHighlight, View, ViewStyle, useColorScheme } from "react-native"
+import { FlatList, Pressable, ScrollView, StyleProp, StyleSheet, Text, TouchableHighlight, View, ViewStyle, useColorScheme } from "react-native"
 import DefaultStyle from "@/styles/default";
 import Card from "./Card";
 import Item, { ItemType } from "@/models/item";
@@ -73,8 +73,9 @@ export default function RoomList(props: RoomListProps){
                     item={selectedItem}
                 />
                 <FlatList
-                style={styles.listDefault}
+                style={[styles.listDefault]}
                 ItemSeparatorComponent={() => <View style={ DefaultStyle.separator }></View>}
+                scrollEnabled={true}
                     data={props.items}
                     renderItem={(item) => {
                         let content = (
@@ -133,12 +134,14 @@ export default function RoomList(props: RoomListProps){
 
     function displayInline(){
         return (
-            <View style={styles.listInline}>
-                {props.items.map((room) => 
-                    <View style={[styles.itemInline]} key={room.id}>
-                        <Card title={ room.name } onPress={props.onItemClick ? () => props.onItemClick(room) : () => {}} titleNumberOfLines={2} />
-                    </View>
-                )}
+            <View style={[styles.listInline]}>
+                <ScrollView horizontal={true} scrollEnabled={true}>
+                    {props.items.map((room) => 
+                        <View style={[styles.itemInline,]} key={room.id}>
+                            <Card title={ room.name } onPress={props.onItemClick ? () => props.onItemClick(room) : () => {}} titleNumberOfLines={2} />
+                        </View>
+                    )}
+                </ScrollView>
             </View>
         )
     }
@@ -165,12 +168,13 @@ export default function RoomList(props: RoomListProps){
 
 const styles = StyleSheet.create({
     listDefault: {
-
+        
     },
     listInline: {
         flex: 1,
         flexDirection:'row',
-        overflow: 'scroll'
+        overflow: 'scroll',
+        height: '100%'
     },
     listCard: {
         flexDirection: 'row',
@@ -180,10 +184,10 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 5,
         borderLeftWidth: 5,
-        borderColor: '#333'
+        borderColor: '#333',
     },
     itemInline:{
-        width: '40%',
+        width: 150,
         height: '100%'
     },
     itemCard: {

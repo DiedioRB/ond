@@ -23,7 +23,7 @@ export default function InputModal(props: InputModalProps){
         onRequestClose={() => props.onCloseButtonPressed()}
         >
             <View style={[DefaultStyle.flexCenter, DefaultStyle.container, { backgroundColor: '#0003' }]}>
-                <View style={[DefaultStyle.modal]}>
+                <View style={[DefaultStyle.modal, {height: '40%'}]}>
                     <View style={[DefaultStyle.fillParent, DefaultStyle.verticalFlex]}>
                         <View style={[DefaultStyle.flexCenter, DefaultStyle.fillParent, {flex: 3, alignItems: 'flex-start', gap: 3}]}>
                             <Text style={[{fontSize: 20, fontWeight: 'bold'}]}>{ props.title }</Text>

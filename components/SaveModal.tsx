@@ -48,7 +48,7 @@ export default function SaveModal(props: SaveModalProps){
         onShow={onOpen}
         >
             <View style={[DefaultStyle.flexCenter, DefaultStyle.container, { backgroundColor: '#0003' }]}>
-                <View style={[DefaultStyle.modal]}>
+                <View style={[DefaultStyle.modal, {height: '50%'}]}>
                     <View style={[DefaultStyle.fillParent, DefaultStyle.verticalFlex, {gap: 20}]}>
                         <View style={[DefaultStyle.flexCenter, DefaultStyle.fillParent, {flex: 3, alignItems: 'flex-start', gap: 3}]}>
                             <Text style={[{fontSize: 20, fontWeight: 'bold'}]}>Onde?</Text>
@@ -79,14 +79,15 @@ export default function SaveModal(props: SaveModalProps){
                             <Text style={[{fontSize: 20, fontWeight: 'bold'}]}>O quê?</Text>
                             <TextInput onChangeText={(text) => { setInputText(text) }} value={inputText} style={[DefaultStyle.fillWidth, {borderBottomWidth: 2, fontSize: 16, paddingHorizontal: 5, paddingVertical: 10} ]} />
                         </View>
-                        <View style={[DefaultStyle.horizontalFlex, {flex: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 20}]}>
+                        <View style={[DefaultStyle.horizontalFlex, {flex: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 10}]}>
                             <StylizedButton
                                 onPress={() => {
                                     props.onCloseButtonPressed()
                                     setInputText("")
                                     setSelectedRoom(null)
                                 }}
-                                title={"Cancelar"} />
+                                title={"Cancelar"}
+                                style={DefaultStyle.danger} />
                             <StylizedButton
                                 onPress={() => {
                                     props.onConfirmButtonPressed(inputText, selectedRoom, ItemType.ITEM, props.item)
