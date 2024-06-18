@@ -19,17 +19,18 @@ export default function RootLayout() {
         headerLargeTitleStyle: {color: DefaultStyle.onBackground.color},
       }} />
       <Stack.Screen name="login" options={{ headerShown: false }} />
-      <Stack.Screen name="armazenamentos" options={{ 
+      <Stack.Screen name="armazenamentos/index" options={{ 
         headerTitle: 'Espaços',
         headerLargeStyle: {backgroundColor: DefaultStyle.background.backgroundColor},
         headerLargeTitleStyle: {color: DefaultStyle.onBackground.color},
+        animation: "fade_from_bottom"
       }} />
       <Stack.Screen name="armazenamentos/[id]" options={{
         headerTitle: 'Espaços', animation: 'slide_from_right',
         headerLargeStyle: {backgroundColor: DefaultStyle.background.backgroundColor},
         headerLargeTitleStyle: {color: DefaultStyle.onBackground.color},
       }} />
-      <Stack.Screen name="busca/[item]" options={{
+      <Stack.Screen name="armazenamentos/busca/[item]" options={{
         headerTitle: 'Resultados da busca', animation: 'slide_from_bottom',
         headerLargeStyle: {backgroundColor: DefaultStyle.background.backgroundColor},
         headerLargeTitleStyle: {color: DefaultStyle.onBackground.color},
