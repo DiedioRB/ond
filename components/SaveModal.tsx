@@ -57,14 +57,14 @@ export default function SaveModal(props: SaveModalProps){
                                 search
                                 searchPlaceHolder="Procurar"
                                 searchInputTxtStyle={{ padding: 5 }}
-                                data={[new Item(null, "Novo armazenamento", undefined, ItemType.ROOM, []), ...rooms]}
+                                data={[new Item(null, "Nova sala", undefined, ItemType.ROOM, []), ...rooms]}
                                 onSelect={(room : Item, index) => {
                                     setSelectedRoom(room ?? null)
                                 }}
                                 renderButton={(selected : Item, isOpen) => {
                                     return (
                                         <View style={styles.dropdownButton}>
-                                            <Text>{selected?.name ?? "Novo armazenamento"}</Text>
+                                            <Text>{selected?.name ?? "Nova sala"}</Text>
                                         </View>
                                     )
                                 }}

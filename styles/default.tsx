@@ -54,7 +54,43 @@ const DefaultStyle = StyleSheet.create({
     },
     emptyText: {
         color: '#555',
-    }
+    },
+    background: {
+        backgroundColor: '#8364a1',
+    },
+    onBackground: {
+        color: '#DDD',
+        borderColor: '#DDD',
+        textShadowColor: '#000',
+        textShadowOffset: {width: 2, height: 0},
+        textShadowRadius: 2
+    },
+    primary: {
+        backgroundColor: '#586fa1'
+    },
+    onPrimary: {
+        color: '#EEE',
+        borderColor: '#EEE',
+    },
+    onPrimaryAccent : {
+        color: '#BBB',
+        borderColor: '#BBB',
+    },
+    primaryHighlight: {
+        backgroundColor: '#384f80'
+    },
+    white: {
+        backgroundColor: '#DDD'
+    },
+    black: {
+        backgroundColor: '#333'
+    },
+    danger: {
+        color: '#B36'
+    },
+    info: {
+        color: '#f4d553'
+    },
 })
 
 export default DefaultStyle;

@@ -78,14 +78,14 @@ export default function RoomList(props: RoomListProps){
                     data={props.items}
                     renderItem={(item) => {
                         let content = (
-                            <View style={[styles.itemDefault, DefaultStyle.horizontalFlex, {alignItems: 'center', justifyContent: "space-between"}]} key={item.item.id}>
+                            <View style={[styles.itemDefault, DefaultStyle.horizontalFlex, DefaultStyle.primary, {alignItems: 'center', justifyContent: "space-between"}]} key={item.item.id}>
                                 <View style={DefaultStyle.horizontalFlex}>
-                                    <Ionicons name={ item.item.kind == ItemType.ROOM ? "cube" : "document" } size={32} style={{ marginRight: 5 }} />
+                                    <Ionicons name={ item.item.kind == ItemType.ROOM ? "cube" : "document" } size={32} style={[DefaultStyle.onPrimary, { marginRight: 5 }]} />
                                     <View>
-                                        <Text style={ styles.title }>{ item.item.name }</Text>
+                                        <Text style={ [DefaultStyle.onPrimary, styles.title] }>{ item.item.name }</Text>
                                         {
                                             item.item.parent
-                                            ? <Text style={ styles.subtitle }>Guardado em "{ item.item.parent?.name }"</Text>
+                                            ? <Text style={ [DefaultStyle.onPrimaryAccent, styles.subtitle] }>Guardado em "{ item.item.parent?.name }"</Text>
                                             : undefined
                                         }
                                     </View>
@@ -95,13 +95,13 @@ export default function RoomList(props: RoomListProps){
                                     setSelectedItem(item.item)
                                     setDeleteModalVisible(true)
                                 }}>
-                                    <Ionicons name="trash" size={32} />
+                                    <Ionicons name="trash" size={32} style={DefaultStyle.danger} />
                                 </Pressable>
                                 <Pressable onPress={() => {
                                     setSelectedItem(item.item)
                                     setEditModalVisible(true)
                                 }}>
-                                    <Ionicons name="information-circle" size={32} />
+                                    <Ionicons name="information-circle" size={32} style={DefaultStyle.info} />
                                 </Pressable>
                                 </View>
                             </View>
@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 5,
         borderLeftWidth: 5,
+        borderColor: '#333'
     },
     itemInline:{
         width: '40%',

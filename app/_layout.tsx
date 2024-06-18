@@ -8,9 +8,13 @@ import { Pressable, View } from "react-native";
 export default function RootLayout() {
   return (
     <Stack>
-      <Stack.Screen name="index" options={{ headerTitle: 'Ond?', headerRight: (props) => (
-        <HeaderButtons headerButtonProps={props} />
-      )
+      <Stack.Screen name="index" options={{ headerTitle: 'Ond?',
+        headerStyle: {backgroundColor: DefaultStyle.background.backgroundColor}, headerTitleStyle: {color: DefaultStyle.onBackground.color},
+        headerLargeStyle: {backgroundColor: DefaultStyle.background.backgroundColor},
+        headerLargeTitleStyle: {color: DefaultStyle.onBackground.color},
+        headerRight: (props) => (
+          <HeaderButtons headerButtonProps={props} />
+        )
       }} />
       <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="armazenamentos" options={{ headerTitle: 'Espaços' }} />

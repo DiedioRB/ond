@@ -15,16 +15,16 @@ type CardProps = {
 }
 export default function Card(props: CardProps){
     return (
-        <TouchableHighlight underlayColor="#DDD" onPress={props.onPress ?? (() => {})} style={[styles.card, DefaultStyle.verticalFlex, props.style]}>
+        <TouchableHighlight underlayColor={DefaultStyle.primaryHighlight.backgroundColor} onPress={props.onPress ?? (() => {})} style={[styles.card, DefaultStyle.verticalFlex, DefaultStyle.primary, props.style]}>
             <View style={[DefaultStyle.verticalFlex]}>
                 <View style={[DefaultStyle.horizontalFlex, {alignItems: 'center'}]}>
-                    { props.icon ? <Ionicons name={ props.icon } size={32} color={ props.style.color } style={{ marginRight: 5 }} /> : undefined }
-                    <Text style={[styles.text, styles.title]} ellipsizeMode="tail" numberOfLines={props.titleNumberOfLines ?? 1}>{ props.title }</Text>
+                    { props.icon ? <Ionicons name={ props.icon } size={32} color={ props.style.color } style={[DefaultStyle.onPrimary, { marginRight: 5 }]} /> : undefined }
+                    <Text style={[DefaultStyle.onPrimary, styles.text, styles.title]} ellipsizeMode="tail" numberOfLines={props.titleNumberOfLines ?? 1}>{ props.title }</Text>
                 </View>
                 {props.content
                     ? (
                         <View style={[DefaultStyle.verticalFlex, {flex: 3, justifyContent: 'center'}]}>
-                            <Text style={[styles.text]} ellipsizeMode="tail" numberOfLines={props.contentNumberOfLines ?? 1}>{ props.content }</Text>
+                            <Text style={[DefaultStyle.onPrimary, styles.text]} ellipsizeMode="tail" numberOfLines={props.contentNumberOfLines ?? 1}>{ props.content }</Text>
                         </View>
                     )
                     : undefined
@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 24,
-        color: '#333',
     },
     title: {
         fontWeight: 'bold'

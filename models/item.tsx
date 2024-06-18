@@ -48,7 +48,6 @@ export default class Item{
     }
 
     get toJson() : Map<String, any> {
-        console.log(this.parent?.toJson);
         let parentJson = null
         if(this.parent?.toJson && this.parent?.id != undefined){
             parentJson = this.parent.toJson

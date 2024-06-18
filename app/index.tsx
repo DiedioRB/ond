@@ -1,5 +1,5 @@
 import Card from "@/components/Card";
-import ItemList from "@/components/ItemList";
+
 import Item, { ItemType } from "@/models/item";
 import API from "@/services/api";
 import DefaultStyle from "@/styles/default";
@@ -51,9 +51,6 @@ export default function Index() {
         user = await StorageHelper.getUser()
         if(user == null){
             router.replace('/login')
-        }else{
-            console.log(user)
-            
         }
     }
 
@@ -67,7 +64,7 @@ export default function Index() {
     }, [isFocused])
 
     return (
-        <View style={[DefaultStyle.container, {rowGap: 10}]}>
+        <View style={[DefaultStyle.container, DefaultStyle.background, {rowGap: 10}]}>
             <InputModal
                 isVisible={searchModalVisible}
                 onConfirmButtonPressed={(text: any) => {
@@ -115,14 +112,14 @@ export default function Index() {
             </View>
             <View>
                 <View style={{ flexDirection:'row', alignItems: 'flex-start', gap: 10, padding: 10 }}>
-                    <Text style={{ fontSize: 34 }}>Espaços</Text>
-                    <StylizedButton href="armazenamentos" title="Ver todos" />
+                    <Text style={[DefaultStyle.onBackground, { fontSize: 34 }]}>Salas</Text>
+                    <StylizedButton href="armazenamentos" title="Ver todas" />
                 </View>
                 <RoomList items={rooms} display={ListType.inline} onItemClick={(room: Item) => { router.push('armazenamentos/'+room.id) }} />
             </View>
             <Splitter/>
-            <View style={[{ flex: 3, padding: 5, paddingTop: 10 }]}>
-                <Text style={{ fontSize: 28 }}>Adicionados recentemente</Text>
+            <View style={[{ flex: 3, padding: 5, paddingTop: 10, overflow:'scroll' }]}>
+                <Text style={[DefaultStyle.onBackground, { fontSize: 28 }]}>Adicionados recentemente</Text>
                 { isLoading
                     ? <ActivityIndicator size="large" color={DefaultStyle.loading.color} />
                     : <RoomList items={recents} display={ListType.default} onItemClick={

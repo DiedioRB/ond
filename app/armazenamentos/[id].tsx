@@ -1,5 +1,5 @@
 import Card from "@/components/Card";
-import ItemList from "@/components/ItemList";
+
 import Item, { ItemType } from "@/models/item";
 import API from "@/services/api";
 import DefaultStyle from "@/styles/default";
@@ -39,7 +39,6 @@ export default function ArmazenamentoById(props: ArmazenamentosProps) {
     async function fetchCurrent(){
         setIsLoading(true);
         let room : Item | undefined = await API.room(id)
-        console.log(room);
         
         room!.items.push(...(await API.items(room!.id)))
         setCurrentRoom(room)
@@ -57,30 +56,30 @@ export default function ArmazenamentoById(props: ArmazenamentosProps) {
     })
 
     return (
-        <View style={[DefaultStyle.container]}>
+        <View style={[DefaultStyle.container, DefaultStyle.background]}>
             <View style={[{ flex: 3, padding: 5, paddingTop: 10 }]}>
-                <Text style={{ fontSize: 28 }}>{ currentRoom?.name }</Text>
+                <Text style={[DefaultStyle.onBackground, { fontSize: 28 }]}>{ currentRoom?.name }</Text>
                 { isLoading
                     ? <ActivityIndicator size="large" color={DefaultStyle.loading.color} />
                     : (
                         <View style={[DefaultStyle.verticalFlex, { gap: 5 }]}>
                             <View>
-                            <Text style={{ fontSize: 20 }}>Armazenamentos aqui:</Text>
+                            <Text style={[DefaultStyle.onBackground, { fontSize: 20 }]}>Armazenamentos aqui:</Text>
                             {
                                 rooms.length > 0
                                 ?
                                 <RoomList items={rooms} display={ListType.inline}
                                     onItemClick={(room: Item) => {router.push('armazenamentos/'+room.id)}} />
-                                : <Text style={{ fontSize: 16 }}>Nenhum armazenamento encontrado</Text>
+                                : <Text style={[DefaultStyle.onBackground, { fontSize: 16 }]}>Nenhum armazenamento encontrado</Text>
                             }
                                 <Splitter/>
                                 </View>
                                 <View>
-                                    <Text style={{ fontSize: 20 }}>Itens aqui:</Text>
+                                    <Text style={[DefaultStyle.onBackground, { fontSize: 20 }]}>Itens aqui:</Text>
                             {
                                 items.length > 0
-                                ? <ItemList items={items} />
-                                : <Text style={{ fontSize: 16 }}>Nada guardado aqui</Text>
+                                ? <RoomList items={items} display={ListType.default} />
+                                : <Text style={[DefaultStyle.onBackground, { fontSize: 16 }]}>Nada guardado aqui</Text>
                             }
                                 </View>
                         </View>

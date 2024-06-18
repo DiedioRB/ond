@@ -1,3 +1,4 @@
+import DefaultStyle from "@/styles/default";
 import { Link } from "expo-router";
 import { Button, Pressable, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
 
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
     splitter: {
         height: 5,
         width: '95%',
-        backgroundColor: '#999',
+        backgroundColor: DefaultStyle.onBackground.color,
         alignSelf: 'center',
         justifyContent: 'center',
         marginVertical: 5

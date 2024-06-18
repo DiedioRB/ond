@@ -12,12 +12,12 @@ type CustomHeaderProps = {
 
 export default function HeaderButtons (props : CustomHeaderProps){
     return (
-        <View style={[DefaultStyle.horizontalFlex, { padding: 10, gap: 10 }]}>
+        <View style={[DefaultStyle.horizontalFlex, { padding: 10, gap: 10, alignItems: 'center' }]}>
           <Pressable onPress={() => {
             StorageHelper.logout()
             router.replace('/login')
           }}>
-            <Ionicons name="log-out" size={32} />
+            <Ionicons name="log-out" size={32} style={DefaultStyle.onBackground} />
           </Pressable>
         </View>
     )

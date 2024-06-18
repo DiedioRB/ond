@@ -1,5 +1,5 @@
 import Card from "@/components/Card";
-import ItemList from "@/components/ItemList";
+
 import Item from "@/models/item";
 import API from "@/services/api";
 import DefaultStyle from "@/styles/default";
@@ -46,9 +46,9 @@ export default function Armazenamentos(props: ArmazenamentosProps) {
     }, []);
 
     return (
-        <View style={[DefaultStyle.container]}>
+        <View style={[DefaultStyle.container, DefaultStyle.background, styles.list]}>
             <View style={[{ flex: 3, padding: 5, paddingTop: 10 }]}>
-                <Text style={{ fontSize: 28 }}>Espaços</Text>
+                <Text style={[DefaultStyle.onBackground, { fontSize: 28 }]}>Espaços</Text>
                 { isLoading
                     ? <ActivityIndicator size="large" color={DefaultStyle.loading.color} />
                     : (
@@ -62,5 +62,7 @@ export default function Armazenamentos(props: ArmazenamentosProps) {
 }
 
 const styles = StyleSheet.create({
-
+    list: {
+        overflow: 'scroll'
+    }
 });
